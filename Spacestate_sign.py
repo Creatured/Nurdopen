@@ -34,14 +34,14 @@ def open():
     image = Image.new("RGB", (64, 32))
     font = ImageFont.truetype("Comfortaa-Regular.ttf", 12)
     draw = ImageDraw.Draw(image)
-    draw.text((16,0), "We're\nOpen", font=font, alignment="center",fill=(0, 255, 0,)) 
+    draw.text((10,0), "NURDs\nare in!", font=font, alignment="center",fill=(0, 255, 0,)) 
     show_image(image)
 
 def closed():
     image = Image.new("RGB", (64, 32))
     font = ImageFont.truetype("Comfortaa-Regular.ttf", 12)
     draw = ImageDraw.Draw(image)
-    draw.text((13,0), "We're\nClosed", font=font, alignment="center",fill=(255, 0, 0,)) 
+    draw.text((16,0), "", font=font, alignment="center",fill=(255, 0, 0,)) 
     show_image(image)
 
 
@@ -49,7 +49,7 @@ def setup_mqtt():
     mqtt.on_connect = on_connect
     mqtt.on_message = on_message
     mqtt.on_disconnect = on_disconnect
-    mqtt.connect("jarvis.vm.nurd.space")
+    mqtt.connect("mqtt.vm.nurd.space")
 
 def on_disconnect(client, userdata, rc):
     setup_mqtt()
