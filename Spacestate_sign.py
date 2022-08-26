@@ -3,7 +3,6 @@ import struct
 import socket
 import os
 from PIL import Image, ImageFont, ImageDraw
-
 import paho.mqtt.client 
 mqtt = paho.mqtt.client.Client()
 
@@ -61,7 +60,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     
     if msg.topic == "space/state":
-        state = True if msg.payload.decode("utf-8") == "True" else False
+        state = True if msg.payload.decode("utf-8").lower() == "true" else False
         if state==True:
             open()
         else:
