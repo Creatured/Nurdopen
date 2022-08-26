@@ -3,6 +3,7 @@ import struct
 import socket
 import os
 from PIL import Image, ImageFont, ImageDraw
+
 import paho.mqtt.client 
 mqtt = paho.mqtt.client.Client()
 
