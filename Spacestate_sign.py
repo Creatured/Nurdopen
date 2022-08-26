@@ -60,12 +60,12 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     
     if msg.topic == "space/state":
-        spacestate = True if msg.payload.decode("utf-8") == "True" else False
-        if spacestate==True:
+        state = True if msg.payload.decode("utf-8") == "True" else False
+        if state==True:
             open()
         else:
             closed()
-        print(spacestate)
+        print(state)
 
 setup_mqtt()
 mqtt.loop_forever()
