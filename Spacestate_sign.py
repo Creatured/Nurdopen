@@ -22,6 +22,8 @@ pixelvlut = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 font = ImageFont.truetype("Comfortaa-Regular.ttf", 12)
 
+state = False
+
 def send_bufferfull(pixelBuffer):
     buffer = versionBit + rgbMode
 
@@ -84,6 +86,8 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("deurbel")
 
 def on_message(client, userdata, msg):
+    global state
+
     print(time.ctime(), f'mqtt for {msg.topic}')
 
     if msg.topic == "space/state":
