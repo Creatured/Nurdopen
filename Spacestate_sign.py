@@ -7,6 +7,9 @@ import os
 import time
 from PIL import Image, ImageFont, ImageDraw
 import paho.mqtt.client 
+
+print(time.ctime(), 'START')
+
 mqtt = paho.mqtt.client.Client()
 
 width  = 64
@@ -67,18 +70,18 @@ def moment():
     draw.text((16,0), "Momentje", font=font, alignment="center",fill=(255, 0, 255,)) 
     show_image(image)
 
-def setup_mqtt():
-    mqtt.on_connect = on_connect
-    mqtt.on_message = on_message
-    mqtt.on_disconnect = on_disconnect
-    mqtt.connect("mqtt.vm.nurd.space")
+def setup_mqtt(client):
+    client.on_connect = on_connect
+    client.on_message = on_message
+    client.on_disconnect = on_disconnect
+    client.connect("mqtt.vm.nurd.space")
 
 def on_disconnect(client, userdata, rc):
-    setup_mqtt()
+    setup_mqtt(client)
 
 def on_connect(client, userdata, flags, rc):
-    mqtt.subscribe("space/state")
-    mqtt.subscribe("deurbel")
+    client.subscribe("space/state")
+    client.subscribe("deurbel")
 
 def on_message(client, userdata, msg):
     if msg.topic == "space/state":
@@ -101,5 +104,6 @@ def on_message(client, userdata, msg):
         else:
             moment()
 
-setup_mqtt()
+setup_mqtt(mqtt)
+
 mqtt.loop_forever()
