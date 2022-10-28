@@ -52,6 +52,19 @@ def closed():
     draw.text((16,0), "", font=font, alignment="center",fill=(255, 0, 0,)) 
     show_image(image)
 
+def dicht():
+    image = Image.new("RGB", (width, height))
+    font = ImageFont.truetype("Comfortaa-Regular.ttf", 12)
+    draw = ImageDraw.Draw(image)
+    draw.text((16,0), "Er is\nniemand!", font=font, alignment="center",fill=(255, 0, 0,)) 
+    show_image(image)
+
+def moment():
+    image = Image.new("RGB", (width, height))
+    font = ImageFont.truetype("Comfortaa-Regular.ttf", 12)
+    draw = ImageDraw.Draw(image)
+    draw.text((16,0), "Momentje", font=font, alignment="center",fill=(255, 0, 255,)) 
+    show_image(image)
 
 def setup_mqtt():
     mqtt.on_connect = on_connect
@@ -64,15 +77,28 @@ def on_disconnect(client, userdata, rc):
 
 def on_connect(client, userdata, flags, rc):
     mqtt.subscribe("space/state")
+    mqtt.subscribe("deurbel")
 
 def on_message(client, userdata, msg):
     if msg.topic == "space/state":
         state = True if msg.payload.decode("utf-8").lower() == "true" else False
-        if state==True:
+
+        if state == True:
             open()
+
         else:
             closed()
+
         print(state)
+
+    elif msg.topic == 'deurbel':
+        print('Deurbel')
+
+        if state == False:
+            dicht()
+        
+        else:
+            moment()
 
 setup_mqtt()
 mqtt.loop_forever()
