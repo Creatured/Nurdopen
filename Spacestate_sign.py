@@ -1,11 +1,15 @@
+#! /usr/bin/python3
+
 from ctypes import alignment
 import struct
 import socket
 import os
 from PIL import Image, ImageFont, ImageDraw
 import paho.mqtt.client 
-
 mqtt = paho.mqtt.client.Client()
+
+width  = 64
+height = 32
 
 pixelBuffer = []
 rgbMode = struct.pack("<?", 0)
@@ -16,11 +20,14 @@ font = ImageFont.truetype("Comfortaa-Regular.ttf", 12)
 
 def send_bufferfull(pixelBuffer):
     buffer = versionBit + rgbMode
+
     for buf in pixelBuffer:
         buffer += buf
-    if len(buffer) >= 1400:
-        pixelvlut.sendto(buffer, ("esp32-07B018.dhcp.nurd.space.", 5004))
+
+    if len(buffer) >= 1400 and len(buffer) < 1510:
+        pixelvlut.sendto(buffer, ('esp32-07B018.dhcp.nurd.space.', 5004))
         return True
+
     return False
 
 def show_image(image):
@@ -33,16 +40,18 @@ def show_image(image):
                     pixelBuffer = []
 
 def open():
-    image = Image.new("RGB", (64, 32))
+    image = Image.new("RGB", (width, height))
     draw = ImageDraw.Draw(image)
     draw.text((10,0), "NURDs\nare in!", font=font, alignment="center",fill=(0, 255, 0,)) 
     show_image(image)
 
 def closed():
-    image = Image.new("RGB", (64, 32))
+    image = Image.new("RGB", (width, height))
+    font = ImageFont.truetype("Comfortaa-Regular.ttf", 12)
     draw = ImageDraw.Draw(image)
     draw.text((16,0), "", font=font, alignment="center",fill=(255, 0, 0,)) 
     show_image(image)
+
 
 def setup_mqtt():
     mqtt.on_connect = on_connect
@@ -57,7 +66,6 @@ def on_connect(client, userdata, flags, rc):
     mqtt.subscribe("space/state")
 
 def on_message(client, userdata, msg):
-    
     if msg.topic == "space/state":
         state = True if msg.payload.decode("utf-8").lower() == "true" else False
         if state==True:
@@ -67,5 +75,4 @@ def on_message(client, userdata, msg):
         print(state)
 
 setup_mqtt()
-
 mqtt.loop_forever()
