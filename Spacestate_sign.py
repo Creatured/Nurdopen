@@ -60,7 +60,7 @@ def dicht():
     image = Image.new("RGB", (width, height))
     font = ImageFont.truetype("Comfortaa-Regular.ttf", 12)
     draw = ImageDraw.Draw(image)
-    draw.text((16,0), "Er is\nniemand!", font=font, alignment="center",fill=(255, 0, 0,)) 
+    draw.text((16,0), "Er is\nniemand!", font=font, alignment="center",fill=(255, 255, 0,)) 
     show_image(image)
 
 def moment():
@@ -84,6 +84,8 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("deurbel")
 
 def on_message(client, userdata, msg):
+    print(time.ctime(), f'mqtt for {msg.topic}')
+
     if msg.topic == "space/state":
         state = True if msg.payload.decode("utf-8").lower() == "true" else False
 
