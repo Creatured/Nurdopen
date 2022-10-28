@@ -4,6 +4,7 @@ from ctypes import alignment
 import struct
 import socket
 import os
+import time
 from PIL import Image, ImageFont, ImageDraw
 import paho.mqtt.client 
 mqtt = paho.mqtt.client.Client()
@@ -89,10 +90,10 @@ def on_message(client, userdata, msg):
         else:
             closed()
 
-        print(state)
+        print(time.ctime(), state)
 
     elif msg.topic == 'deurbel':
-        print('Deurbel')
+        print(time.ctime(), 'Deurbel')
 
         if state == False:
             dicht()
