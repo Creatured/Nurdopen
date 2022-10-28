@@ -19,7 +19,7 @@ def send_bufferfull(pixelBuffer):
     for buf in pixelBuffer:
         buffer += buf
     if len(buffer) >= 1400:
-        pixelvlut.sendto(buffer,  ("10.208.42.134", 5004))
+        pixelvlut.sendto(buffer, ("esp32-07B018.dhcp.nurd.space.", 5004))
         return True
     return False
 
