@@ -96,7 +96,7 @@ class doorPixel():
         self.client.connect("mqtt.vm.nurd.space")
 
     def on_disconnect(self, client, userdata, rc):
-        self.setup_mqtt(client)
+        self.setup_mqtt()
 
     def on_connect(self, client, userdata, flags, rc):
         self.client.subscribe("space/state")
